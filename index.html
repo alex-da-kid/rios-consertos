@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rios Consertos — Malas, Bolsas & Calçados</title>
+  <meta name="description" content="Consertamos malas, mochilas, bolsas e calçados com cuidado artesanal. Orçamento rápido pelo WhatsApp.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Karla:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Dark backgrounds */
+      --black:         #080808;
+      --black-mid:     #0F0D0C;
+      --black-card:    #161210;
+      --black-raised:  #1D1916;
+      --black-border:  #2C2420;
+
+      /* Brand colors — pulled from logo */
+      --amber:         #C4881C;
+      --amber-light:   #DDA830;
+      --orange:        #C85C14;
+      --orange-light:  #E07830;
+      --red-orange:    #C03410;
+
+      /* Text */
+      --cream:         #F0EBE2;
+      --cream-dim:     #A8988A;
+      --cream-soft:    #5E5048;
+
+      /* WhatsApp */
+      --wa:            #25D366;
+      --wa-dark:       #1aa84f;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: 'Karla', sans-serif;
+      background: var(--black);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* Subtle grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Logo images — mix-blend-mode:lighten makes the black JPEG background
+       invisible on dark backgrounds by showing whatever is behind black pixels */
+    .logo-img {
+      mix-blend-mode: lighten;
+      display: block;
+    }
+
+    /* ---------- NAVIGATION ---------- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+
+    nav.scrolled {
+      background: rgba(8, 8, 8, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(200, 136, 28, 0.12);
+    }
+
+    .nav-logo {
+      display: block;
+      text-decoration: none;
+      line-height: 0;
+    }
+
+    .nav-logo .logo-img {
+      height: 44px;
+      width: auto;
+    }
+
+    /* Centre nav menu */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .nav-menu a {
+      display: inline-block;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--cream-dim);
+      text-decoration: none;
+      border-radius: 8px;
+      letter-spacing: 0.01em;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: var(--cream);
+      background: rgba(200, 136, 28, 0.08);
+    }
+
+    .nav-menu a.active { color: var(--amber); }
+
+    /* Hamburger */
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      background: none;
+      border: 1px solid var(--black-border);
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 0 9px;
+      transition: border-color 0.2s;
+    }
+
+    .nav-burger:hover { border-color: rgba(200,136,28,0.4); }
+
+    .nav-burger span {
+      display: block;
+      height: 1.5px;
+      background: var(--cream-dim);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    nav.menu-open .nav-burger span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    nav.menu-open .nav-burger span:nth-child(2) { opacity: 0; }
+    nav.menu-open .nav-burger span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      top: 64px; left: 0; right: 0;
+      background: rgba(8, 8, 8, 0.97);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--black-border);
+      padding: 1rem 1.5rem 1.5rem;
+      flex-direction: column;
+      gap: 0.25rem;
+      z-index: 199;
+    }
+
+    .nav-drawer.open { display: flex; }
+
+    .nav-drawer a {
+      display: block;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--cream-dim);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-drawer a:hover,
+    .nav-drawer a.active {
+      color: var(--amber);
+      background: rgba(200, 136, 28, 0.07);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-ig {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--black-border);
+      color: var(--cream-dim);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+    .nav-ig:hover {
+      border-color: rgba(200,136,28,0.4);
+      color: var(--amber);
+      background: rgba(200,136,28,0.06);
+    }
+
+    .nav-ig svg { width: 16px; height: 16px; }
+
+    .nav-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--wa);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.625rem 1.25rem;
+      border-radius: 100px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .nav-wa:hover {
+      background: var(--wa-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(37, 211, 102, 0.4);
+    }
+
+    .nav-wa svg { width: 15px; height: 15px; }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 9rem 2.5rem 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Warm radial glow behind logo */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse at center,
+        rgba(200, 136, 28, 0.14) 0%,
+        rgba(200, 92, 20, 0.08) 40%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    /* Diagonal stripe texture */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -55deg,
+        transparent 0px, transparent 40px,
+        rgba(200, 136, 28, 0.025) 40px, rgba(200, 136, 28, 0.025) 42px
+      );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5.5vw, 5rem);
+      font-weight: 300;
+      line-height: 1.08;
+      color: var(--cream);
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(.16,1,.3,1) 0.4s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--amber-light), var(--orange-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.0625rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--cream-dim);
+      max-width: 520px;
+      margin: 0 auto 2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(.16,1,.3,1) 0.55s forwards;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2.75rem;
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(.16,1,.3,1) 0.7s forwards;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.375rem 0.875rem;
+      border: 1px solid var(--black-border);
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 400;
+      color: var(--cream-dim);
+      background: var(--black-card);
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(.16,1,.3,1) 0.85s forwards;
+    }
+
+    /* WhatsApp CTA button */
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      background: var(--wa);
+      color: #fff;
+      text-decoration: none;
+      padding: 1.0625rem 2.125rem;
+      border-radius: 100px;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      position: relative;
+      transition: background 0.2s, transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 6px 30px rgba(37, 211, 102, 0.35);
+    }
+
+    .btn-wa::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 100px;
+      background: var(--wa);
+      z-index: -1;
+      animation: ringPulse 2.8s ease 2s infinite;
+    }
+
+    @keyframes ringPulse {
+      0%   { transform: scale(1); opacity: 0.55; }
+      70%  { transform: scale(1.28); opacity: 0; }
+      100% { transform: scale(1.28); opacity: 0; }
+    }
+
+    .btn-wa:hover {
+      background: var(--wa-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(37, 211, 102, 0.5);
+    }
+
+    .btn-wa svg { width: 20px; height: 20px; }
+
+    .hero-note {
+      font-size: 0.8125rem;
+      color: var(--cream-soft);
+      font-weight: 300;
+    }
+
+    .hero-note strong {
+      font-weight: 600;
+      color: var(--cream-dim);
+    }
+
+    /* ---------- SHARED ---------- */
+    .section { padding: 6.5rem 2.5rem; }
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    .sec-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.125rem;
+    }
+
+    .sec-label::before {
+      content: '';
+      display: block;
+      width: 1.5rem; height: 1px;
+      background: var(--amber);
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.375rem);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--cream);
+    }
+
+    .sec-title em {
+      font-style: italic;
+      background: linear-gradient(120deg, var(--amber-light), var(--orange-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ---------- SERVICES ---------- */
+    .services {
+      background: var(--black-mid);
+      border-top: 1px solid var(--black-border);
+    }
+
+    .services-head {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 3rem;
+      align-items: end;
+      margin-bottom: 3.5rem;
+    }
+
+    .services-desc {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--cream-dim);
+      font-weight: 300;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .scard {
+      background: var(--black-card);
+      border-radius: 14px;
+      padding: 2rem 1.625rem 1.75rem;
+      border: 1px solid var(--black-border);
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scard::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), var(--amber-light));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s cubic-bezier(.16,1,.3,1);
+    }
+
+    .scard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      border-color: rgba(200, 136, 28, 0.3);
+    }
+
+    .scard:hover::after { transform: scaleX(1); }
+
+    .scard-icon {
+      width: 46px; height: 46px;
+      border-radius: 10px;
+      background: var(--black-raised);
+      border: 1px solid var(--black-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.375rem;
+      color: var(--amber);
+    }
+
+    .scard-icon svg { width: 23px; height: 23px; }
+
+    .scard-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 0.625rem;
+    }
+
+    .scard-desc {
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: var(--cream-dim);
+      font-weight: 300;
+    }
+
+    /* ---------- HOW IT WORKS ---------- */
+    .how {
+      background: var(--black);
+      border-top: 1px solid var(--black-border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .how::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 80% 50%,
+        rgba(200, 92, 20, 0.05) 0%, transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    .how-head { margin-bottom: 4rem; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 2rem;
+      left: calc(16.67% + 1.5rem);
+      right: calc(16.67% + 1.5rem);
+      height: 1px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(200, 136, 28, 0.25) 0px, rgba(200, 136, 28, 0.25) 8px,
+        transparent 8px, transparent 18px
+      );
+    }
+
+    .step { padding: 0 1.5rem; }
+    .step:first-child { padding-left: 0; }
+    .step:last-child  { padding-right: 0; }
+
+    .step-num {
+      width: 4rem; height: 4rem;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 136, 28, 0.2);
+      background: rgba(200, 136, 28, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--amber);
+      margin-bottom: 1.75rem;
+    }
+
+    .step-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.375rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+
+    .step-desc {
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: var(--cream-soft);
+      font-weight: 300;
+    }
+
+    /* ---------- TESTIMONIALS ---------- */
+    .testimonials {
+      background: var(--black-mid);
+      border-top: 1px solid var(--black-border);
+      border-bottom: 1px solid var(--black-border);
+    }
+
+    .testi-head {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .google-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      border-radius: 14px;
+      padding: 0.875rem 1.5rem;
+      margin-top: 1.25rem;
+      text-decoration: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .google-badge:hover {
+      border-color: rgba(200,136,28,0.3);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    .google-badge-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--cream-dim);
+    }
+
+    .google-badge-logo svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .google-badge-divider {
+      width: 1px; height: 28px;
+      background: var(--black-border);
+    }
+
+    .google-badge-rating {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.1rem;
+    }
+
+    .google-badge-stars {
+      color: #FBBC04;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+    }
+
+    .google-badge-count {
+      font-size: 0.75rem;
+      color: var(--cream-soft);
+      font-weight: 300;
+    }
+
+    .testi-head .sec-label {
+      justify-content: center;
+      display: inline-flex;
+    }
+
+    .testi-head .sec-label::before { display: none; }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .tcard {
+      background: var(--black-card);
+      border-radius: 14px;
+      padding: 2rem;
+      border: 1px solid var(--black-border);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .tcard:hover {
+      border-color: rgba(200, 136, 28, 0.2);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .tcard-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4.5rem;
+      line-height: 0.9;
+      color: rgba(200, 136, 28, 0.25);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .tcard-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.125rem;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--cream-dim);
+      margin-bottom: 1.5rem;
+    }
+
+    .tcard-stars {
+      font-size: 0.875rem;
+      letter-spacing: 0.1em;
+      color: var(--amber);
+      margin-bottom: 1.125rem;
+    }
+
+    .tcard-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .tcard-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--black-raised);
+      border: 1px solid rgba(200, 136, 28, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--amber);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .tcard-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .tcard-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--cream);
+      line-height: 1.3;
+    }
+
+    .tcard-service {
+      font-size: 0.75rem;
+      color: var(--cream-soft);
+      font-weight: 300;
+    }
+
+    /* ---------- CONTACT / MAP ---------- */
+    .contact {
+      background: var(--black-mid);
+      border-top: 1px solid var(--black-border);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+
+    .contact-block {}
+
+    .contact-block-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-block-value {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--cream-dim);
+      line-height: 1.6;
+    }
+
+    .contact-block-value a {
+      color: var(--cream-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-block-value a:hover { color: var(--cream); }
+
+    .hours-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.25rem 1.25rem;
+      font-size: 0.9375rem;
+      font-weight: 300;
+      color: var(--cream-dim);
+    }
+
+    .hours-grid .day { color: var(--cream-soft); font-size: 0.875rem; }
+    .hours-grid .closed { color: var(--cream-soft); font-style: italic; }
+
+    .map-wrap {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--black-border);
+      height: 340px;
+    }
+
+    .map-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      filter: grayscale(30%) invert(92%) hue-rotate(180deg) brightness(0.85) contrast(0.9);
+    }
+
+    @media (max-width: 920px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .map-wrap { height: 280px; }
+    }
+
+    /* ---------- FINAL CTA ---------- */
+    .cta-section {
+      background: var(--black);
+      text-align: center;
+      padding: 8rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      border-top: 1px solid var(--black-border);
+    }
+
+    /* Warm amber glow */
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse at center,
+        rgba(200, 136, 28, 0.1) 0%,
+        rgba(200, 92, 20, 0.06) 40%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    .cta-section::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -60deg,
+        transparent 0px, transparent 32px,
+        rgba(200, 136, 28, 0.02) 32px, rgba(200, 136, 28, 0.02) 34px
+      );
+      pointer-events: none;
+    }
+
+    .cta-section > * { position: relative; z-index: 1; }
+
+    .cta-section .sec-label {
+      color: var(--amber);
+      justify-content: center;
+      display: inline-flex;
+    }
+
+    .cta-section .sec-label::before { background: var(--amber); display: none; }
+
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.75rem, 5.5vw, 5.5rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.06;
+      margin: 1rem 0 1.25rem;
+    }
+
+    .cta-title em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--amber-light), var(--orange-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cta-sub {
+      font-size: 1.0625rem;
+      color: var(--cream-dim);
+      font-weight: 300;
+      line-height: 1.65;
+      max-width: 460px;
+      margin: 0 auto 3rem;
+    }
+
+    .btn-wa-xl {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--wa);
+      color: #fff;
+      text-decoration: none;
+      padding: 1.25rem 2.625rem;
+      border-radius: 100px;
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      transition: background 0.2s, transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 8px 40px rgba(37, 211, 102, 0.35);
+    }
+
+    .btn-wa-xl:hover {
+      background: var(--wa-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 50px rgba(37, 211, 102, 0.5);
+    }
+
+    .btn-wa-xl svg { width: 22px; height: 22px; }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--black-border);
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+
+    .footer-logo-img {
+      height: 56px;
+      width: auto;
+      margin: 0 auto 1rem;
+    }
+
+    .footer-tag {
+      font-size: 0.875rem;
+      color: var(--cream-soft);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-rule {
+      width: 2.5rem; height: 1px;
+      background: rgba(200, 136, 28, 0.2);
+      margin: 0 auto 1.5rem;
+    }
+
+    .footer-socials {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,136,28,0.15);
+      color: var(--cream-soft);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .footer-social-link:hover {
+      border-color: rgba(200,136,28,0.4);
+      color: var(--amber);
+    }
+
+    .footer-social-link svg { width: 16px; height: 16px; }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: rgba(240, 235, 226, 0.18);
+      font-weight: 300;
+    }
+
+    /* ---------- SCROLL REVEAL ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(.16,1,.3,1), transform 0.7s cubic-bezier(.16,1,.3,1);
+    }
+
+    .reveal.in { opacity: 1; transform: none; }
+
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(26px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 920px) {
+      .services-head { grid-template-columns: 1fr; gap: 1.25rem; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: 1fr; gap: 2.5rem; }
+      .steps::before { display: none; }
+      .step { padding: 0; }
+      .testi-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .nav-menu { display: none; }
+      .nav-burger { display: flex; }
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 0.875rem 1.25rem; }
+      .nav-logo .logo-img { height: 36px; }
+      .hero { padding: 7rem 1.25rem 5rem; }
+      .section { padding: 4.5rem 1.25rem; }
+      .services-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .cta-section { padding: 6rem 1.25rem; }
+      footer { padding: 2.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =================== NAVIGATION =================== -->
+  <nav id="nav">
+    <a href="#inicio" class="nav-logo">
+      <img class="logo-img" src="logo.jpeg" alt="Rios Consertos" height="44">
+    </a>
+
+    <!-- Desktop menu -->
+    <div class="nav-menu" id="nav-menu">
+      <a href="#servicos">Serviços</a>
+      <a href="#como-funciona">Como Funciona</a>
+      <a href="#depoimentos">Avaliações</a>
+      <a href="#contato">Onde Estamos</a>
+    </div>
+
+    <div class="nav-links">
+    <!-- Mobile hamburger -->
+    <button class="nav-burger" id="nav-burger" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="https://www.instagram.com/rioconsertos_2021/" class="nav-ig" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+    <a href="https://wa.me/5585999641395?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20para%20conserto." class="nav-wa" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Orçamento
+    </a>
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="nav-drawer" id="nav-drawer">
+    <a href="#servicos">Serviços</a>
+    <a href="#como-funciona">Como Funciona</a>
+    <a href="#depoimentos">Avaliações</a>
+    <a href="#contato">Onde Estamos</a>
+  </div>
+
+  <!-- =================== HERO =================== -->
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+
+      <h1 class="hero-title">
+        Suas peças merecem<br>uma <em>nova vida.</em>
+      </h1>
+
+      <p class="hero-sub">
+        Consertamos malas, mochilas, bolsas e calçados com cuidado artesanal e materiais de qualidade. Orçamento rápido e sem compromisso pelo WhatsApp.
+      </p>
+
+      <div class="hero-tags">
+        <span class="tag">Malas</span>
+        <span class="tag">Mochilas</span>
+        <span class="tag">Bolsas</span>
+        <span class="tag">Calçados</span>
+        <span class="tag">Zíperes</span>
+        <span class="tag">Costuras</span>
+        <span class="tag">Alças</span>
+      </div>
+
+      <div class="hero-actions">
+        <a href="https://wa.me/5585999641395?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20para%20conserto." class="btn-wa" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Solicitar Orçamento
+        </a>
+        <span class="hero-note">Resposta em até <strong>30 minutos</strong></span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =================== SERVICES =================== -->
+  <section class="section services" id="servicos">
+    <div class="container">
+      <div class="services-head">
+        <div>
+          <span class="sec-label reveal">Nossos Serviços</span>
+          <h2 class="sec-title reveal d1">Cuidamos do que<br>você <em>mais gosta.</em></h2>
+        </div>
+        <p class="services-desc reveal d2">
+          Com anos de experiência e atenção a cada detalhe, devolvemos a função e a beleza das suas peças favoritas. Do reparo simples à restauração completa, nenhum conserto é pequeno demais para nós.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <div class="scard reveal">
+          <div class="scard-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2.5"/>
+              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+              <line x1="12" y1="11" x2="12" y2="17"/>
+              <line x1="9" y1="14" x2="15" y2="14"/>
+            </svg>
+          </div>
+          <h3 class="scard-name">Malas</h3>
+          <p class="scard-desc">Rodas, zíperes, alças, forração interna e estrutura de malas de viagem e executivas.</p>
+        </div>
+
+        <div class="scard reveal d1">
+          <div class="scard-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21H7a2 2 0 0 1-2-2V9a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v10a2 2 0 0 1-2 2z"/>
+              <path d="M9 4v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V4"/>
+              <line x1="9" y1="14" x2="15" y2="14"/>
+            </svg>
+          </div>
+          <h3 class="scard-name">Mochilas</h3>
+          <p class="scard-desc">Zíperes, alças, costuras, ilhoses e impermeabilização de mochilas de todo tipo.</p>
+        </div>
+
+        <div class="scard reveal d2">
+          <div class="scard-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
+          <h3 class="scard-name">Bolsas</h3>
+          <p class="scard-desc">Troca de alças, fechos, costuras, tingimento e restauração de bolsas de couro e tecido.</p>
+        </div>
+
+        <div class="scard reveal d3">
+          <div class="scard-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 18h20"/>
+              <path d="M5 18V9l3-5h5l2 5h4a1 1 0 0 1 1 1v8"/>
+              <path d="M9 9h5"/>
+            </svg>
+          </div>
+          <h3 class="scard-name">Calçados</h3>
+          <p class="scard-desc">Troca de solados, costura, tingimento, limpeza profunda e restauração de tênis, sapatos e sandálias.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== HOW IT WORKS =================== -->
+  <section class="section how" id="como-funciona">
+    <div class="container">
+      <div class="how-head">
+        <span class="sec-label reveal">Como Funciona</span>
+        <h2 class="sec-title reveal d1">Simples, rápido e<br><em>sem complicação.</em></h2>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Envie fotos pelo WhatsApp</h3>
+          <p class="step-desc">Tire fotos do item que precisa de conserto e mande para a gente. Quanto mais detalhes, melhor o diagnóstico.</p>
+        </div>
+
+        <div class="step reveal d1">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Receba seu orçamento</h3>
+          <p class="step-desc">Em até 30 minutos você recebe um orçamento claro e justo. Sem surpresas, sem letras miúdas.</p>
+        </div>
+
+        <div class="step reveal d2">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Conserto e entrega</h3>
+          <p class="step-desc">Aprovado o orçamento, realizamos o serviço com qualidade e atenção. Entrega combinada conforme sua necessidade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== TESTIMONIALS =================== -->
+  <section class="section testimonials" id="depoimentos">
+    <div class="container">
+      <div class="testi-head">
+        <span class="sec-label reveal">Depoimentos</span>
+        <h2 class="sec-title reveal d1">O que nossos <em>clientes dizem.</em></h2>
+        <a href="https://share.google/rUH7fXzIWMHjM8oFi" target="_blank" rel="noopener noreferrer" class="google-badge reveal d2">
+          <span class="google-badge-logo">
+            <!-- Google "G" icon -->
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Google
+          </span>
+          <span class="google-badge-divider"></span>
+          <span class="google-badge-rating">
+            <span class="google-badge-stars">★★★★★</span>
+            <span class="google-badge-count">200+ avaliações · Ver todas</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="testi-grid">
+        <div class="tcard reveal">
+          <span class="tcard-quote" aria-hidden="true">"</span>
+          <p class="tcard-text">O melhor lugar para consertos de bolsas e sapatos de couro! Alta qualidade. Couro legítimo. As pinturas ficam perfeitas!</p>
+          <div class="tcard-stars" aria-label="5 estrelas">★★★★★</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar"><img src="Mariana Macambyra.png" alt="Mariana Macambyra"></div>
+            <div>
+              <div class="tcard-name">Mariana Macambyra</div>
+              <div class="tcard-service">via Google</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tcard reveal d1">
+          <span class="tcard-quote" aria-hidden="true">"</span>
+          <p class="tcard-text">Conheço a Rios Consertos há anos! Super indico o trabalho deles porque é de excelência! O produto fica ainda melhor do que era antes de passar pelas mãos deles! Nota 10!</p>
+          <div class="tcard-stars" aria-label="5 estrelas">★★★★★</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar"><img src="Lilia Oliveira.png" alt="Lilia Oliveira"></div>
+            <div>
+              <div class="tcard-name">Lilia Oliveira</div>
+              <div class="tcard-service">via Google · Local Guide</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tcard reveal d2">
+          <span class="tcard-quote" aria-hidden="true">"</span>
+          <p class="tcard-text">Serviço feito com muita qualidade e atendimento excelente. Estava com a alça de uma bolsa toda desgastada, ela foi toda refeita e ficou perfeita! Indico muito!</p>
+          <div class="tcard-stars" aria-label="5 estrelas">★★★★★</div>
+          <div class="tcard-author">
+            <div class="tcard-avatar"><img src="Lara Rocha.png" alt="Lara Rocha"></div>
+            <div>
+              <div class="tcard-name">Lara Rocha</div>
+              <div class="tcard-service">via Google</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== CONTACT / MAP =================== -->
+  <section class="section contact" id="contato">
+    <div class="container">
+      <span class="sec-label reveal">Onde Estamos</span>
+      <h2 class="sec-title reveal d1" style="margin-bottom:3rem;">Venha nos <em>visitar.</em></h2>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+
+          <div class="contact-block reveal">
+            <div class="contact-block-label">Endereço</div>
+            <div class="contact-block-value">
+              R. Tereza Cristina, 2266 — lojas 01 e 02<br>
+              Benfica, Fortaleza — CE<br>
+              CEP 60015-038
+            </div>
+          </div>
+
+          <div class="contact-block reveal d1">
+            <div class="contact-block-label">Telefone / WhatsApp</div>
+            <div class="contact-block-value">
+              <a href="tel:+5585999641395">(85) 99964-1395</a>
+            </div>
+          </div>
+
+          <div class="contact-block reveal d2">
+            <div class="contact-block-label">Horário de Funcionamento</div>
+            <div class="hours-grid">
+              <span class="day">Segunda — Sexta</span><span>9h às 18h</span>
+              <span class="day">Sábado</span><span>9h às 13h</span>
+              <span class="day">Domingo</span><span class="closed">Fechado</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="map-wrap reveal d2">
+          <iframe
+            src="https://maps.google.com/maps?q=R.+Tereza+Cristina,+2266,+Benfica,+Fortaleza,+CE,+60015-038,+Brazil&output=embed&z=16"
+            allowfullscreen
+            loading="lazy"
+            title="Localização Rios Consertos"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== FINAL CTA =================== -->
+  <section class="cta-section" id="cta">
+    <span class="sec-label reveal">Pronto para começar?</span>
+    <h2 class="cta-title reveal d1">Não descarte.<br><em>Conserte.</em></h2>
+    <p class="cta-sub reveal d2">Envie uma foto pelo WhatsApp agora e receba seu orçamento em minutos. Sem burocracia, sem compromisso.</p>
+    <a href="https://wa.me/5585999641395?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20para%20conserto." class="btn-wa-xl reveal d3" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Solicitar Orçamento pelo WhatsApp
+    </a>
+  </section>
+
+  <!-- =================== FOOTER =================== -->
+  <footer>
+    <img class="logo-img footer-logo-img" src="logo.jpeg" alt="Rios Consertos">
+    <p class="footer-tag">Malas · Mochilas · Bolsas · Calçados</p>
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/rioconsertos_2021/" class="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <a href="https://wa.me/5585999641395" class="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+      </a>
+      <a href="https://share.google/rUH7fXzIWMHjM8oFi" class="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="Google">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+      </a>
+    </div>
+    <div class="footer-rule"></div>
+    <p class="footer-copy">&copy; 2025 Rios Consertos. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    const nav      = document.getElementById('nav');
+    const burger   = document.getElementById('nav-burger');
+    const drawer   = document.getElementById('nav-drawer');
+    const sections = document.querySelectorAll('section[id]');
+    const menuLinks = document.querySelectorAll('.nav-menu a, .nav-drawer a');
+
+    // Scrolled state
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+      updateActive();
+    }, { passive: true });
+
+    // Hamburger toggle
+    burger.addEventListener('click', () => {
+      const open = drawer.classList.toggle('open');
+      nav.classList.toggle('menu-open', open);
+      burger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    });
+
+    // Close drawer when a link is clicked
+    drawer.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        drawer.classList.remove('open');
+        nav.classList.remove('menu-open');
+      });
+    });
+
+    // Scroll spy — highlight active section link
+    function updateActive() {
+      let current = '';
+      sections.forEach(sec => {
+        if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+      });
+      menuLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    }
+
+    updateActive();
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
